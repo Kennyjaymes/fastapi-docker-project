@@ -41,8 +41,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDS}", 
                                                       usernameVariable: 'DOCKER_USER', 
                                                       passwordVariable: 'DOCKER_PASS')]) {
-                        // In Windows batch, we use double quotes for the password and pipe it
-                        bat "echo %DOCKER_PASS%| docker login -u %DOCKER_USER% --password-stdin"
+                        // Using -p directly as it's more reliable for avoiding trailing spaces in Windows Batch
+                        bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
                     }
                 }
             }
