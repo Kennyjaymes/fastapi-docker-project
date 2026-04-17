@@ -2,21 +2,21 @@
 
 A modern, fast (high-performance), web framework for building APIs with Python 3.11+, containerized with Docker and automated with Jenkins.
 
-## 🚀 Features
+## Features
 
 - **FastAPI**: High performance, easy to learn, fast to code, ready for production.
 - **Dockerized**: Easy deployment and environment consistency.
 - **CI/CD Integrated**: Jenkins pipeline for automated builds and Docker Hub pushing.
 - **Health Checks**: Built-in `/health` endpoint for monitoring.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework**: [FastAPI](https://fastapi.tiangolo.com/)
 - **ASGI Server**: [Uvicorn](https://www.uvicorn.org/)
 - **Containerization**: [Docker](https://www.docker.com/)
 - **Automation**: [Jenkins](https://www.jenkins.io/)
 
-## 🏃 Local Development
+## Local Development
 
 ### Prerequisites
 
@@ -51,7 +51,7 @@ A modern, fast (high-performance), web framework for building APIs with Python 3
    docker run -d -p 8000:8000 fastapi-docker-app
    ```
 
-## 🏗️ CI/CD Pipeline
+## CI/CD Pipeline
 
 The project includes a `Jenkinsfile` that defines a declarative pipeline with the following stages:
 
@@ -60,7 +60,7 @@ The project includes a `Jenkinsfile` that defines a declarative pipeline with th
 3. **Login to Docker Hub**: Authenticats with Docker Hub using Jenkins credentials.
 4. **Tag and Push Image**: Tags the image with `latest` and the build number, then pushes to `kennyjaymes/fastapi-docker-project`.
 
-## 📌 API Endpoints
+## API Endpoints
 
 - `GET /`: Returns a simple "Hello World" message.
 - `GET /health`: Returns the health status of the application.
