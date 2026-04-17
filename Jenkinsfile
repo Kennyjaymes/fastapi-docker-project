@@ -9,6 +9,16 @@ pipeline {
     }
 
     stages {
+        stage('Diagnostics') {
+            steps {
+                script {
+                    echo "Checking environment..."
+                    bat "docker --version"
+                    bat "docker info"
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 // Checkout code from source control
@@ -20,7 +30,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Docker image: ${DOCKER_REPO}:latest"
-                    sh "docker build -t ${DOCKER_REPO}:latest ."
+                    bat "docker build -t ${DOCKER_REPO}:latest ."
                 }
             }
         }
@@ -31,7 +41,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDS}", 
                                                       usernameVariable: 'DOCKER_USER', 
                                                       passwordVariable: 'DOCKER_PASS')]) {
-                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                        // In Windows batch, we use double quotes for the password and pipe it
+                        bat "echo %DOCKER_PASS%| docker login -u %DOCKER_USER% --password-stdin"
                     }
                 }
             }
@@ -41,11 +52,11 @@ pipeline {
             steps {
                 script {
                     echo "Pushing Docker image: ${DOCKER_REPO}:latest"
-                    sh "docker push ${DOCKER_REPO}:latest"
+                    bat "docker push ${DOCKER_REPO}:latest"
                     
                     // Optional: Tag and push with build number
-                    sh "docker tag ${DOCKER_REPO}:latest ${DOCKER_REPO}:${BUILD_NUMBER}"
-                    sh "docker push ${DOCKER_REPO}:${BUILD_NUMBER}"
+                    bat "docker tag ${DOCKER_REPO}:latest ${DOCKER_REPO}:%BUILD_NUMBER%"
+                    bat "docker push ${DOCKER_REPO}:%BUILD_NUMBER%"
                 }
             }
         }
@@ -54,14 +65,14 @@ pipeline {
     post {
         always {
             script {
-                sh "docker logout"
+                bat "docker logout"
             }
         }
         success {
             echo "Successfully built and pushed ${DOCKER_REPO}"
         }
         failure {
-            echo "Pipeline failed."
+            echo "Pipeline failed. Check stage logs for details."
         }
     }
 }
